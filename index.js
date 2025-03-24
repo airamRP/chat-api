@@ -7,7 +7,9 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173", // Permite que el frontend en Vite se conecte
+    // Permite que el frontend en Vite se conecte
+    // Añade más orígenes si subes el frontend
+    origin: ["http://localhost:5173", "https://chat-api-ia35.onrender.com"], 
     methods: ["GET", "POST"],
   },
 });
