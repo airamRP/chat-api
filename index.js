@@ -22,22 +22,35 @@ app.get("/", (req, res) => {
   res.send("¡Servidor de chat funcionando!");
 });
 
+// Almacenar nicknames asociados a los sockets
+const users = new Map();
+
 // Manejo de eventos WebSocket
 io.on("connection", (socket) => {
   console.log("Usuario conectado:", socket.id);
 
+  
+  // Guardar el nickname cuando el cliente lo envía
+  socket.on("setNickname", (nickname) => {
+    users.set(socket.id, nickname);
+    console.log(`Nickname establecido: ${socket.id} -> ${nickname}`);
+  });
+
   // Escucha mensajes del cliente
   socket.on("message", (msg) => {
     console.log("Mensaje recibido:", msg);
-    // Hora actual en formato HH:MM:SS
     const timestamp = new Date().toLocaleTimeString();
+    const nickname = users.get(socket.id) || "Anónimo"; // Usar "Anónimo" si no hay nickname
+    io.emit("message", { text: msg, nickname, timestamp });
+
     // Envía el mensaje con el ID del remitente a todos los clientes conectados
-    io.emit("message", { text: msg, senderId: socket.id, timestamp}); 
+    // io.emit("message", { text: msg, senderId: socket.id, timestamp}); 
   });
 
   // Detecta desconexión
   socket.on("disconnect", () => {
     console.log("Usuario desconectado:", socket.id);
+    users.delete(socket.id); // Limpiar el nickname al desconectar
   });
 });
 
