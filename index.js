@@ -9,7 +9,8 @@ const io = new Server(httpServer, {
   cors: {
     // Permite que el frontend en Vite se conecte
     // Añade más orígenes si subes el frontend
-    origin: ["http://localhost:5173", "https://chat-api-ia35.onrender.com"], 
+    // origin: ["http://localhost:5173", "https://chat-api-ia35.onrender.com"], 
+    origin: ["http://localhost:5173", "https://dapper-pavlova-e4f8ab.netlify.app"], 
     methods: ["GET", "POST"],
   },
 });
